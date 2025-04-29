@@ -1,6 +1,34 @@
+<?php
+session_start();
+include "database.php";
+$reviews = []; // To store customer reviews
+
+// Handle form submissions
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   if (isset($_POST['delete_review'])) {
+        // Handle review deletion
+      $review_id = (int) $_POST['delete_review'];
+      $delete_query = "DELETE FROM questions WHERE id = ?";
+      $stmt = $conn->prepare($delete_query);
+      $stmt->bind_param("i", $review_id);
+      if ($stmt->execute()) {
+         $success = "Review deleted successfully!";
+      } else {
+         $error = "Error deleting the review: " . $conn->error;
+      }
+   }
+}
+
+// Fetch customer reviews
+$query = "SELECT id, username, question FROM questions ORDER BY id DESC LIMIT 5";
+$result = $conn->query($query);
+if ($result) {
+    $reviews = $result->fetch_all(MYSQLI_ASSOC);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>   
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -135,9 +163,9 @@
    </div>
 
    <div class="content">
-      <h3>about us</h3>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita et, recusandae nobis fugit modi quibusdam ea assumenda, nulla quisquam repellat rem aliquid sequi maxime sapiente autem ipsum? Nobis, provident voluptate?</p>
-      <a href="about.php" class="btn">read more</a>
+      <h3>About Us</h3>
+      <p>Welcome to Travel, your ultimate partner in exploring the world! We are passionate about creating unforgettable travel experiences for adventurers, families, and explorers alike. Whether you're seeking breathtaking landscapes, cultural immersion, or thrilling adventures, we are here to make your dream journey a reality. Let us guide you to the most beautiful destinations and hidden gems around the globe.</p>
+      <a href="about.php" class="btn">Read More</a>
    </div>
 
 </section>
@@ -148,7 +176,7 @@
 
 <section class="home-packages">
 
-   <h1 class="heading-title"> our packages </h1>
+   <h1 class="heading-title">Our Packages</h1>
 
    <div class="box-container">
 
@@ -157,9 +185,9 @@
             <img src="images/img-1.jpg" alt="">
          </div>
          <div class="content">
-            <h3>adventure & tour</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, sint!</p>
-            <a href="book.php" class="btn">book now</a>
+            <h3>Adventure & Tour</h3>
+            <p>Embark on an exciting adventure to explore the wonders of nature, from majestic mountains to serene beaches. Perfect for thrill-seekers and nature lovers!</p>
+            <a href="book.php" class="btn">Book Now</a>
          </div>
       </div>
 
@@ -168,9 +196,9 @@
             <img src="images/img-2.jpg" alt="">
          </div>
          <div class="content">
-            <h3>adventure & tour</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, sint!</p>
-            <a href="book.php" class="btn">book now</a>
+            <h3>Luxury Getaways</h3>
+            <p>Indulge in the finest luxury experiences with our exclusive packages. Enjoy world-class accommodations, gourmet dining, and personalized services.</p>
+            <a href="book.php" class="btn">Book Now</a>
          </div>
       </div>
       
@@ -179,15 +207,15 @@
             <img src="images/img-3.jpg" alt="">
          </div>
          <div class="content">
-            <h3>adventure & tour</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos, sint!</p>
-            <a href="book.php" class="btn">book now</a>
+            <h3>Family Vacations</h3>
+            <p>Create lasting memories with your loved ones on our family-friendly tours. Explore destinations that offer fun, relaxation, and bonding for all ages.</p>
+            <a href="book.php" class="btn">Book Now</a>
          </div>
       </div>
 
    </div>
 
-   <div class="load-more"> <a href="package.php" class="btn">load more</a> </div>
+   <div class="load-more"> <a href="package.php" class="btn">Load More</a> </div>
 
 </section>
 
@@ -197,28 +225,38 @@
 
 <section class="home-offer">
    <div class="content">
-      <h3>upto 50% off</h3>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure tempora assumenda, debitis aliquid nesciunt maiores quas! Magni cumque quaerat saepe!</p>
-      <a href="book.php" class="btn">book now</a>
+      <h3>Up to 50% Off</h3>
+      <p class="font-2xl">Don't miss out on our limited-time offers! Enjoy up to 50% off on selected travel packages. Whether you're planning a solo trip, a romantic getaway, or a family vacation, we have the perfect deal for you. Book now and start your journey to unforgettable memories!</p>
+      <a href="book.php" class="btn">Book Now</a>
+   </div>
+</section>
+<section class="py-10 bg-white">
+   <div class="container mx-auto text-center shadow-md p-6 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white">
+      <h2 class="text-3xl font-bold mb-6">What Our Customers Say</h2>
+
+      <!-- Display Customer Reviews -->
+      <div class="space-y-6">
+         <?php foreach ($reviews as $review) { ?>
+            <div class="p-4 rounded shadow">
+               <h4 class="font-bold text-2xl"><?= htmlspecialchars($review['username']) ?></h4>
+               <p class="text-gray-600 text-2xl"><?= htmlspecialchars($review['question']) ?></p>
+               <!-- Delete Button -->
+               <form method="POST" class="mt-4">
+                  <input type="hidden" name="delete_review" value="<?= $review['id'] ?>">
+                  <button type="submit" class="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600">
+                     Delete Review
+                  </button>
+               </form>
+            </div>
+         <?php } ?>
+         <?php if (empty($reviews)) { ?>
+            <p class="text-gray-500">No reviews yet. Be the first to share your experience!</p>
+         <?php } ?>
+      </div>
    </div>
 </section>
 
 <!-- home offer section ends -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <!-- footer section starts  -->
@@ -237,7 +275,7 @@
 
       <div class="box">
          <h3>extra links</h3>
-         <a href="ask.php"> <i class="fas fa-angle-right"></i> ask questions</a>
+         <a href="ask.php"> <i class="fas fa-angle-right"></i>Give Review</a>
          <a href="#"> <i class="fas fa-angle-right"></i> about us</a>
          <a href="#"> <i class="fas fa-angle-right"></i> privacy policy</a>
          <a href="#"> <i class="fas fa-angle-right"></i> terms of use</a>
@@ -264,6 +302,7 @@
    <div class="credit"> created by <span>mr. web designer</span> | all rights reserved! </div>
 
 </section>
+
 
 <!-- footer section ends -->
 

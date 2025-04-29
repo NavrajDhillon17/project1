@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center h-screen">
     <div class="bg-white p-6 rounded shadow-lg w-96">
-        <h2 class="text-xl font-bold mb-4 text-center">Ask a Question</h2>
+        <h2 class="text-xl font-bold mb-4 text-center">Give Review</h2>
 
         <?php if (isset($success)) { ?>
             <p class="text-green-500 text-sm text-center"><?= $success ?></p>
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <form method="POST" class="space-y-4">
             <label class="block">
-                <span class="text-gray-700">Your Question</span>
+                <span class="text-gray-700">Your Review</span>
                 <textarea name="question" rows="4" required class="w-full mt-1 px-3 py-2 border border-gray-300 rounded"></textarea>
             </label>
 

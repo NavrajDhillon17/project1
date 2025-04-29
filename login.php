@@ -13,7 +13,7 @@ include "database.php";
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body class="bg-gradient-to-r from-blue-300 via-orange-800 to-yellow-300 min-h-screen flex flex-col">
+<body class="bg-[url('../phppro/images/logimage.jpg')] max-width-screen bg-cover bg-no-repeat bg-center flex flex-col h-screen">
 
     <!-- Navbar -->
 

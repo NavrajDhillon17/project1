@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,19 +32,20 @@
 <!-- Booking Section Starts -->
 <section class="booking">
    <h1 class="heading-title">Book Your Trip!</h1>
+
    <form action="book_form.php" method="post" class="book-form">
       <div class="flex">
          <div class="inputBox">
             <span>Name :</span>
-            <input type="text" placeholder="Enter your name" name="name" required>
+            <input type="text" placeholder="Enter your name" name="name" required pattern="[a-zA-Z\s]+" title="Name must contain only letters and spaces.">
          </div>
          <div class="inputBox">
             <span>Email :</span>
-            <input type="email" placeholder="Enter your email" name="email"required>
+            <input type="email" placeholder="Enter your email" name="email" required>
          </div>
          <div class="inputBox">
             <span>Phone :</span>
-            <input type="number" placeholder="Enter your number" name="phone"required>
+            <input type="text" placeholder="Enter your 10-digit phone number" name="phone" required pattern="\d{10}" title="Phone number must be exactly 10 digits.">
          </div>
          <div class="inputBox">
             <span>Address :</span>
@@ -55,15 +57,15 @@
          </div>
          <div class="inputBox">
             <span>How Many :</span>
-            <input type="number" placeholder="Number of guests" name="guests"required>
+            <input type="number" placeholder="Number of guests" name="guests" required min="1">
          </div>
          <div class="inputBox">
             <span>Arrivals :</span>
-            <input type="date" name="arrivals" >
+            <input type="date" name="arrivals" required min="<?= date('Y-m-d') ?>">
          </div>
          <div class="inputBox">
             <span>Leaving :</span>
-            <input type="date" name="leaving" >
+            <input type="date" name="leaving" required>
          </div>
       </div>
       <input type="submit" value="Submit" class="btn" name="send" id="submit">
@@ -83,7 +85,7 @@
       </div>
       <div class="box">
          <h3>Extra Links</h3>
-         <a href="#"> <i class="fas fa-angle-right"></i> Ask Questions</a>
+         <a href="ask.php"> <i class="fas fa-angle-right"></i> Give review</a>
          <a href="#"> <i class="fas fa-angle-right"></i> About Us</a>
          <a href="#"> <i class="fas fa-angle-right"></i> Privacy Policy</a>
          <a href="#"> <i class="fas fa-angle-right"></i> Terms of Use</a>
@@ -109,11 +111,6 @@
 <script src="js/script.js"></script>
 <script>
    const form = document.querySelector('.book-form'); // Select the form element
-if (form) {
-   form.addEventListener('submit', function (event) {
-      alert("Form submitted successfully!");
-   });
-}
 </script>
 
 </body>
